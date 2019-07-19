@@ -34,6 +34,9 @@ def processFile(path, filename, sc, rddList):
     rddList.append(words_rdd)
 
 def main(inputFolder, outputFolder):
+    """
+    build an inverted index of the documents to speed up calculation.
+    """
     sc = SparkContext.getOrCreate()
     rddList = []
 
@@ -49,7 +52,8 @@ def main(inputFolder, outputFolder):
     try:
         combined_rdds = sc.union(rddList)\
             .map(lambda x: (x[0], [int(x[1])]))\
-            .reduceByKey(lambda x,y: x+y)
+            .reduceByKey(lambda x,y: x+y)\
+            .map(lambda x: (x[0], sorted(x[1])))
     except:
         print("There are no files in input folder")
 

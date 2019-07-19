@@ -5,16 +5,27 @@ import string
 import os
 
 def cleanWords(words):
-    try:
-        words = words.encode('utc-8')
-    except:
-        print("The file is already in utc-8 format")
+    """
+    list of strings -> list of strings
 
+    Return cleaned words from a list of words.
+    """
+    try:
+        words = words.encode('utf-8')
+    except:
+        print("The file is already in utf-8 format")
+
+    words = words.decode('utf-8')
     words = words.lower()
     cleaned_words = words.translate(str.maketrans('', '', string.punctuation))
     return cleaned_words
 
 def processFile(path, filename, sc, rddList):
+    """
+    string, string, spark_content, list of RDD -> None
+
+    Convert files in a path to rdds and append the rdds into a list.
+    """
     text_file = sc.textFile(path + filename)
     words_rdd = text_file.flatMap(lambda line: cleanWords(line).split())\
         .filter(lambda x: len(x) > 0)

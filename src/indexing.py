@@ -55,6 +55,7 @@ def main(inputFolder, outputFolder):
     
 
 if __name__ == '__main__':
-    inputFolder = './input/indexing/'
-    outputFolder = './output/'
+    from sys import argv
+    inputFolder, outputFolder = argv[1], argv[2]
+
     main(inputFolder, outputFolder)
